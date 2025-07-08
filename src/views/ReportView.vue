@@ -48,7 +48,7 @@
           <div class="mb-4 report-table-title">成绩可视化</div>
           <div class="mb-6">
             <div class="mb-2 report-chart-title">各项目成绩对比</div>
-            <div style="height:220px;">
+            <div class="report-chart-full" style="height:220px;">
               <v-responsive :aspect-ratio="2.1">
                 <div ref="barChart" style="width:100%;height:100%;"></div>
               </v-responsive>
@@ -56,7 +56,7 @@
           </div>
           <div>
             <div class="mb-2 report-chart-title">历史成绩趋势</div>
-            <div style="height:220px;">
+            <div class="report-chart-full" style="height:220px;">
               <v-responsive :aspect-ratio="2.1">
                 <div ref="lineChart" style="width:100%;height:100%;"></div>
               </v-responsive>
@@ -226,6 +226,16 @@ onMounted(async () => {
   color: #222;
   margin-left: 12px;
   letter-spacing: 0.5px;
+}
+.report-chart-full {
+  width: 100%;
+  min-width: 0;
+  overflow-x: visible;
+}
+.report-chart-scroll {
+  /* 彻底移除横向滚动条样式 */
+  overflow-x: visible !important;
+  margin-bottom: 0 !important;
 }
 @media (max-width: 600px) {
   .report-header-navbar {
