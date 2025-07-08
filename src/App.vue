@@ -1,13 +1,14 @@
 <template>
   <v-app>
     <v-main>
-      <LoginView />
+      <ReportView />
     </v-main>
   </v-app>
 </template>
 
 <script setup>
 import LoginView from './views/LoginView.vue'
+import ReportView from './views/ReportView.vue';
 </script>
 
 <style>
