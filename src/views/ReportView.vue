@@ -48,17 +48,17 @@
           <div class="mb-4 report-table-title">成绩可视化</div>
           <div class="mb-6">
             <div class="mb-2 report-chart-title">各项目成绩对比</div>
-            <div class="report-chart-full" style="height:220px;">
+            <div class="report-chart-full" style="height:220px;width:100%;min-width:0;">
               <v-responsive :aspect-ratio="2.1">
-                <div ref="barChart" style="width:100%;height:100%;"></div>
+                <div ref="barChart" style="width:100%;height:100%;min-width:0;"></div>
               </v-responsive>
             </div>
           </div>
           <div>
             <div class="mb-2 report-chart-title">历史成绩趋势</div>
-            <div class="report-chart-full" style="height:220px;">
+            <div class="report-chart-full" style="height:220px;width:100%;min-width:0;">
               <v-responsive :aspect-ratio="2.1">
-                <div ref="lineChart" style="width:100%;height:100%;"></div>
+                <div ref="lineChart" style="width:100%;height:100%;min-width:0;"></div>
               </v-responsive>
             </div>
           </div>
@@ -228,9 +228,9 @@ onMounted(async () => {
   letter-spacing: 0.5px;
 }
 .report-chart-full {
-  width: 100%;
-  min-width: 0;
-  overflow-x: visible;
+  width: 100% !important;
+  min-width: 0 !important;
+  overflow-x: visible !important;
 }
 .report-chart-scroll {
   /* 彻底移除横向滚动条样式 */
