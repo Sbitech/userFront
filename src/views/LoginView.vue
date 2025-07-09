@@ -77,6 +77,7 @@ const login = async () => {
 
     if (response.data) {
       alert('登录成功');
+      localStorage.setItem('participant', JSON.stringify(response.data));
       router.push('/home');
     } else {
       alert('登录失败：用户名或密码错误');

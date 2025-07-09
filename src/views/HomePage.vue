@@ -9,12 +9,12 @@
             <v-img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" />
           </v-avatar>
           <div class="ml-3">
-            <div class="text-body-1 font-weight-bold">参赛选手</div>
-            <div class="text-caption text-grey-darken-1">ID:20250707</div>
+            <div class="text-body-1 font-weight-bold">{{ name || '参赛选手' }}</div>
+            <div class="text-caption text-grey-darken-1">用户名:{{ username || '未登录' }}</div>
           </div>
         </v-row>
         <v-btn icon variant="text" size="small">
-          <v-icon color="#bdbdbd">mdi-logout</v-icon>
+          <v-icon color="#bdbdbd" @click="logout">mdi-logout</v-icon>
         </v-btn>
       </v-row>
     </v-card>
@@ -36,8 +36,28 @@
 </template>
 
 <script setup>
+function logout() {
+  localStorage.removeItem('participant');
+  router.push('/login');
+}
 import { useRouter } from 'vue-router';
+import { ref, onMounted } from 'vue';
 const router = useRouter();
+
+const name = ref('');
+const username = ref('');
+
+onMounted(() => {
+  const user = JSON.parse(localStorage.getItem('participant'));
+  if (user) {
+    name.value = user.name;
+    username.value = user.username;
+  } else {
+    router.push('/login');
+  }
+});
+
+
 const features = [
   {
     icon: 'mdi-account-check',
