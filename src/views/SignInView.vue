@@ -1,17 +1,17 @@
 <template>
   <v-container class="sign-bg px-4" fluid>
     <v-row justify="center">
-      <v-col cols="12" sm="10" md="7" lg="5" class="mx-auto">
+      <v-col cols="12" sm="10" md="7" lg="5" class="mx-auto" >
         <!-- 顶部返回和标题 -->
-        <div class="sign-header-navbar">
+        <div class="sign-header-navbar sign-header-shadow" elevation="6">
           <v-btn icon variant="text" class="sign-header-back" @click="$router.back && $router.back()">
             <v-icon color="#3b82f6">mdi-arrow-left</v-icon>
           </v-btn>
           <span class="sign-header-title">签到功能</span>
         </div>
         <!-- 签到卡片 -->
-        <v-card class="pa-7 mb-8 sign-card" elevation="0">
-          <v-row align="center" class="mb-5">
+        <v-card class="pa-7 mb-8 sign-card card-shadow " elevation="1" style="border-radius: 14px;">
+          <v-row align="center" class="mb-5 px-4 pt-4">
             <v-avatar size="44" class="mr-3" style="background:#e8f7ff;">
               <v-icon size="30" color="#3b82f6">mdi-account</v-icon>
             </v-avatar>
@@ -21,25 +21,25 @@
 
             请确认您的参赛信息
           </v-alert>
-          <v-row class="mb-2 sign-info-row">
+          <v-row class="mb-2 sign-info-row px-2">
             <v-col cols="6" class="sign-label">参赛编号</v-col>
             <v-col cols="6" class="sign-label">参赛项目</v-col>
             <v-col cols="6" class="sign-value font-weight-bold">20250707</v-col>
             <v-col cols="6" class="sign-value font-weight-bold">100米短跑</v-col>
           </v-row>
-          <v-row class="mb-2 sign-info-row">
+          <v-row class="mb-2 sign-info-row px-2">
             <v-col cols="6" class="sign-label">比赛时间</v-col>
             <v-col cols="6" class="sign-label">比赛场地</v-col>
             <v-col cols="6" class="sign-value font-weight-bold">2025-07-7 10:00</v-col>
             <v-col cols="6" class="sign-value font-weight-bold">1号田径场</v-col>
           </v-row>
-          <div class="mb-2 sign-status-list">
+          <div class="mb-2 sign-status-list px-2">
             <div>第一次签到-赛前30分钟：<span class="sign-status sign-status-success">已签到</span></div>
             <div>第二次签到-赛前20分钟：<span class="sign-status sign-status-error">未签到</span></div>
             <div>第三次签到-赛前10分钟：<span class="sign-status sign-status-disabled">待签到</span></div>
           </div>
-          <div class="mb-5 sign-next-time">下次签到时间为：<span class="font-weight-bold">2025-07-07 9:50</span></div>
-          <v-btn color="primary" class="sign-btn" block rounded size="x-large">
+          <div class="mb-5  sign-next-time px-2">下次签到时间为：<span class="font-weight-bold">2025-07-07 9:50</span></div>
+          <v-btn color="primary" class="sign-btn px-4 mb-4" block rounded size="x-large">
             <v-icon left>mdi-qrcode-scan</v-icon>扫码签到
           </v-btn>
         </v-card>
@@ -60,8 +60,8 @@
 .sign-header-navbar {
   width: 100%;
   background: #fff;
-  border-radius: 0;
-  box-shadow: none;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px #e3e8f7;
   padding: 0 32px;
   height: 64px;
   display: flex;
@@ -71,6 +71,12 @@
   margin-bottom: 24px;
   margin-top: 0;
   border-bottom: 1.5px solid #f0f1f5;
+}
+
+.sign-header-shadow {
+  box-shadow: 0 2px 8px #e3e8f7 !important;
+  border-radius: 14px !important;
+  border-bottom: none !important;
 }
 .sign-header-back {
   margin-left: -8px;

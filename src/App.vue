@@ -1,15 +1,14 @@
 <template>
   <v-app>
     <v-main>
-      <AppealView />
+      <router-view />
     </v-main>
   </v-app>
 </template>
 
 <script setup>
 
-import AppealView from './views/AppealView.vue';
-import VideoView from './views/VideoView.vue';
+
 </script>
 
 <style>

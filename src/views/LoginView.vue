@@ -54,6 +54,10 @@
 
 <script setup>
 import { ref } from 'vue';
+import axios from 'axios';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 const username = ref('');
 const password = ref('');
 const showPassword = ref(false);
@@ -66,11 +70,20 @@ const login = async () => {
   }
   loading.value = true;
   try {
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    // 登录成功后的处理
-    console.log('登录成功', { username: username.value, password: password.value });
+    const response = await axios.post('http://localhost:9091/participant/login', {
+      username: username.value,
+      password: password.value
+    });
+
+    if (response.data) {
+      alert('登录成功');
+      router.push('/home');
+    } else {
+      alert('登录失败：用户名或密码错误');
+    }
   } catch (error) {
     console.error('登录失败', error);
+    alert('登录失败：' + (error.response?.data?.message || '服务器错误'));
   } finally {
     loading.value = false;
   }
