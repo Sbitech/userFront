@@ -1,15 +1,15 @@
 <template>
   <v-app>
     <v-main>
-      <LoginView />
+      <AppealView />
     </v-main>
   </v-app>
 </template>
 
 <script setup>
 
-import LoginView from './views/LoginView.vue';
-  
+import AppealView from './views/AppealView.vue';
+import VideoView from './views/VideoView.vue';
 </script>
 
 <style>
