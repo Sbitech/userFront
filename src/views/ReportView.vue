@@ -237,13 +237,62 @@ onMounted(async () => {
   overflow-x: visible !important;
   margin-bottom: 0 !important;
 }
-@media (max-width: 600px) {
+@media (max-width: 900px) {
   .report-header-navbar {
-    padding: 0 12px;
-    height: 48px;
+    padding: 0 8px;
+    height: 52px;
   }
   .report-header-title {
-    font-size: 1.18rem;
+    font-size: 1.08rem;
+  }
+  .report-card {
+    padding: 14px !important;
+    border-radius: 12px;
+  }
+  .report-card-title {
+    font-size: 1.01rem;
+  }
+  .report-table-title {
+    font-size: 0.97rem;
+  }
+  .report-table {
+    font-size: 0.91rem;
+    border-radius: 8px;
+  }
+  .report-table th, .report-table td {
+    padding: 8px 4px;
+  }
+  .report-chart-title {
+    font-size: 0.97rem;
+  }
+}
+@media (max-width: 600px) {
+  .report-header-navbar {
+    padding: 0 6px;
+    height: 44px;
+  }
+  .report-header-title {
+    font-size: 0.98rem;
+  }
+  .report-card {
+    padding: 8px !important;
+    border-radius: 8px;
+  }
+  .report-card-title {
+    font-size: 0.89rem;
+  }
+  .report-table-title {
+    font-size: 0.89rem;
+  }
+  .report-table {
+    font-size: 0.85rem;
+    border-radius: 6px;
+  }
+  .report-table th, .report-table td {
+    padding: 6px 2px;
+  }
+  .report-chart-title {
+    font-size: 0.89rem;
   }
 }
 </style>
