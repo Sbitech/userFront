@@ -3,14 +3,14 @@
     <v-row justify="center">
       <v-col cols="12" sm="10" md="7" lg="5" class="mx-auto">
         <!-- 顶部返回和标题 -->
-        <div class="video-header-navbar">
+        <div class="video-header-navbar video-header-shadow" elevation="6">
           <v-btn icon variant="text" class="video-header-back" @click="$router.back && $router.back()">
             <v-icon color="#3b82f6">mdi-arrow-left</v-icon>
           </v-btn>
           <span class="video-header-title">比赛录像</span>
         </div>
         <!-- 录像卡片 -->
-        <v-card class="pa-7 mb-8 video-card" elevation="0">
+        <v-card class="pa-7 mb-8 video-card card-shadow" elevation="6">
           <v-row align="center" class="mb-4">
             <v-avatar size="44" class="mr-3" style="background:#f5f7ff;">
               <v-icon size="30" color="#a259ff">mdi-video-outline</v-icon>
@@ -58,16 +58,18 @@
           </div>
         </v-card>
         <!-- 上传录像区 -->
-        <div class="video-upload-label mb-2">上传录像</div>
-        <v-card class="pa-0 mb-8 video-upload-card" elevation="0">
-          <v-sheet class="video-upload-box-img" rounded outlined>
-            <v-row align="center" justify="center" style="height: 120px;">
-              <v-icon color="#bdbdbd" size="64">mdi-paperclip</v-icon>
-            </v-row>
-          </v-sheet>
-          <v-btn color="#2563EB" class="video-upload-btn-img" block rounded size="x-large">
-            提交视频
-          </v-btn>
+         <v-card class="pa-7 mb-8 video-card card-shadow" elevation="6">
+          <div class="video-upload-label mb-2">上传录像</div>
+          <v-card class="pa-0 mb-8 video-upload-card" elevation="0">
+            <v-sheet class="video-upload-box-img" rounded outlined>
+              <v-row align="center" justify="center" style="height: 120px;">
+                <v-icon color="#bdbdbd" size="64">mdi-paperclip</v-icon>
+              </v-row>
+            </v-sheet>
+            <v-btn color="#2563EB" class="video-upload-btn-img" block rounded size="x-large">
+              提交视频
+            </v-btn>
+          </v-card>
         </v-card>
       </v-col>
     </v-row>
@@ -86,17 +88,25 @@
 .video-header-navbar {
   width: 100%;
   background: #fff;
-  border-radius: 0;
-  box-shadow: none;
-  padding: 0 0 0 0;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px #e3e8f7;
+  padding: 0 32px;
   height: 64px;
   display: flex;
   align-items: center;
   position: relative;
   z-index: 2;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
   margin-top: 0;
   border-bottom: none;
+}
+.video-header-shadow {
+  box-shadow: 0 2px 8px #e3e8f7 !important;
+  border-radius: 14px !important;
+  border-bottom: none !important;
+}
+.card-shadow {
+  box-shadow: 0 2px 8px #e3e8f7 !important;
 }
 .video-header-back {
   margin-left: -8px;
@@ -311,7 +321,7 @@ body, html {
     font-size: 0.98rem;
   }
   .video-card {
-    padding: 8px !important;
+    padding: 20px !important;
     border-radius: 8px;
   }
   .video-upload-card {

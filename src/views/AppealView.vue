@@ -3,14 +3,14 @@
     <v-row justify="center">
       <v-col cols="12" sm="10" md="7" lg="5" class="mx-auto">
         <!-- 顶部返回和标题 -->
-        <div class="appeal-header-navbar" style="margin-bottom:32px;">
+        <div class="appeal-header-navbar appeal-header-shadow" elevation="6" style="margin-bottom:32px;">
           <v-btn icon variant="text" class="appeal-header-back" @click="$router.back && $router.back()">
             <v-icon color="#3b82f6">mdi-arrow-left</v-icon>
           </v-btn>
           <span class="appeal-header-title">争议申诉</span>
         </div>
         <!-- 申诉表单卡片 -->
-        <v-card class="pa-7 mb-8 appeal-card" elevation="0">
+        <v-card class="pa-7 mb-8 appeal-card card-shadow" elevation="6">
           <v-row align="center" class="mb-5">
             <v-avatar size="44" class="mr-3" style="background:#fff7e6;">
               <v-icon size="30" color="#ff9800">mdi-gavel</v-icon>
@@ -49,7 +49,7 @@
           </v-form>
         </v-card>
         <!-- 申诉记录卡片 -->
-        <v-card class="pa-5 mb-8 appeal-record-card" elevation="0">
+        <v-card class="pa-5 mb-8 appeal-record-card card-shadow" elevation="6">
           <v-row align="center" class="mb-4">
             <v-avatar size="44" class="mr-3" style="background:#f5f7ff;">
               <v-icon size="30" color="#8a8fa3">mdi-undo-variant</v-icon>
@@ -91,17 +91,25 @@
 .appeal-header-navbar {
   width: 100%;
   background: #fff;
-  border-radius: 0;
-  box-shadow: none;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px #e3e8f7;
   padding: 0 32px;
   height: 64px;
   display: flex;
   align-items: center;
   position: relative;
   z-index: 2;
-  margin-bottom: 0;
+  margin-bottom: 24px;
   margin-top: 0;
-  border-bottom: 1.5px solid #f0f1f5;
+  border-bottom: none;
+}
+.appeal-header-shadow {
+  box-shadow: 0 2px 8px #e3e8f7 !important;
+  border-radius: 14px !important;
+  border-bottom: none !important;
+}
+.card-shadow {
+  box-shadow: 0 2px 8px #e3e8f7 !important;
 }
 .appeal-header-back {
   margin-left: -8px;
@@ -355,7 +363,7 @@
     font-size: 0.98rem;
   }
   .appeal-card {
-    padding: 8px !important;
+    padding: 20px !important;
     border-radius: 8px;
   }
   .appeal-card-title {

@@ -3,14 +3,14 @@
     <v-row justify="center">
       <v-col cols="12" sm="10" md="7" lg="5" class="mx-auto">
         <!-- 顶部返回和标题 -->
-        <div class="report-header-navbar">
+        <div class="report-header-navbar report-header-shadow " elevation="6">
           <v-btn icon variant="text" class="report-header-back" @click="$router.back()">
             <v-icon color="#3b82f6">mdi-arrow-left</v-icon>
           </v-btn>
           <span class="report-header-title">成绩报告</span>
         </div>
         <!-- 成绩卡片 -->
-        <v-card class="pa-6 mb-6 report-card" elevation="2">
+        <v-card class="mb-6  report-card card-shadow report-padding" elevation="6">
           <v-row align="center" class="mb-4">
             <v-avatar size="40" class="mr-3" style="background:#e8f7e0;">
               <v-icon size="28" color="#4caf50">mdi-file-document-outline</v-icon>
@@ -44,8 +44,13 @@
           </div>
         </v-card>
         <!-- 成绩可视化 -->
-        <v-card class="pa-6 report-card mb-8" elevation="2">
-          <div class="mb-4 report-table-title">成绩可视化</div>
+        <v-card class="mb-8 report-card card-shadow report-padding" elevation="6">
+          <v-row align="center" class="mb-4">
+            <v-avatar size="40" class="mr-3" style="background:#e8f7ff;">
+              <v-icon size="28" color="#3b82f6">mdi-chart-bar</v-icon>
+            </v-avatar>
+            <span class="report-card-title">成绩可视化</span>
+          </v-row>
           <div class="mb-6">
             <div class="mb-2 report-chart-title">各项目成绩对比</div>
             <div class="report-chart-full" style="height:220px;width:100%;min-width:0;">
@@ -143,6 +148,9 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.report-padding {
+  padding: 16px !important;
+}
 .report-bg {
   background: #f5f7ff;
   min-height: 100vh;
@@ -205,8 +213,8 @@ onMounted(async () => {
 .report-header-navbar {
   width: 100%;
   background: #fff;
-  border-radius: 0;
-  box-shadow: none;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px #e3e8f7;
   padding: 0 32px;
   height: 64px;
   display: flex;
@@ -215,7 +223,15 @@ onMounted(async () => {
   z-index: 2;
   margin-bottom: 24px;
   margin-top: 0;
-  border-bottom: 1.5px solid #f0f1f5;
+  border-bottom: none;
+}
+.report-header-shadow {
+  box-shadow: 0 2px 8px #e3e8f7 !important;
+  border-radius: 14px !important;
+  border-bottom: none !important;
+}
+.card-shadow {
+  box-shadow: 0 2px 8px #e3e8f7 !important;
 }
 .report-header-back {
   margin-left: -8px;
@@ -275,7 +291,7 @@ onMounted(async () => {
     font-size: 0.98rem;
   }
   .report-card {
-    padding: 8px !important;
+    padding: 20px !important;
     border-radius: 8px;
   }
   .report-card-title {
