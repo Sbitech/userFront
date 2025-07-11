@@ -69,11 +69,9 @@ const first = ref("");
 const second = ref("");
 const third = ref("");
 onMounted(() => {
-  console.log('SignInPage mounted');
 
   const getStatus = async () => {
     try {
-      console.log('123123123123');
       const response = await axios.get("http://localhost:9091/signIn/getSignInStatus", {
         params: {
           id: user.id
