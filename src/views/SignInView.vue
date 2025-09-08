@@ -72,7 +72,7 @@ onMounted(() => {
 
   const getStatus = async () => {
     try {
-      const response = await axios.get("http://localhost:9091/signIn/getSignInStatus", {
+      const response = await axios.get("http://localhost:9090/signIn/getSignInStatus", {
         params: {
           id: user.id
         }
