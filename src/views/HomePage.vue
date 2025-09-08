@@ -37,7 +37,7 @@
 
 <script setup>
 function logout() {
-  localStorage.removeItem('participant');
+  localStorage.removeItem('user');
   router.push('/login');
 }
 import { useRouter } from 'vue-router';
@@ -48,7 +48,7 @@ const name = ref('');
 const username = ref('');
 
 onMounted(() => {
-  const user = JSON.parse(localStorage.getItem('participant'));
+  const user = JSON.parse(localStorage.getItem('user'));
   if (user) {
     name.value = user.name;
     username.value = user.username;

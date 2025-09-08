@@ -70,14 +70,14 @@ const login = async () => {
   }
   loading.value = true;
   try {
-    const response = await axios.post('http://localhost:9091/participant/login', {
+    const response = await axios.post('http://localhost:9091/user/login', {
       username: username.value,
       password: password.value
     });
-
+    console.log
     if (response.data) {
       alert('登录成功');
-      localStorage.setItem('participant', JSON.stringify(response.data));
+      localStorage.setItem('user', JSON.stringify(response.data));
       router.push('/home');
     } else {
       alert('登录失败：用户名或密码错误');
@@ -112,7 +112,7 @@ const login = async () => {
 }
 .login-subtitle {
   font-size: 0.98rem;
-  color: #8a8fa3;
+  color: #949597;
 }
 .login-btn {
   font-size: 1.08rem;

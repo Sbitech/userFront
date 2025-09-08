@@ -64,7 +64,7 @@
 <script setup>
 import axios from 'axios'
 import { onMounted, ref } from 'vue';
-const user = JSON.parse(localStorage.getItem('participant'));
+const user = JSON.parse(localStorage.getItem('user'));
 const first = ref("");
 const second = ref("");
 const third = ref("");
