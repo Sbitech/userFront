@@ -19,7 +19,7 @@
           </v-row>
           <v-form>
             <div class="appeal-label">申诉项目</div>
-            <v-select class="mb-4 appeal-input" label="" :items="['长拳', '太极拳', '刀术','剑术','枪，棍']" variant="outlined" density="comfortable" placeholder="请选择申诉项目" hide-details />
+            <v-select class="mb-4 appeal-input" label="" :items="['男子长拳-2025年11月12日']" variant="outlined" density="comfortable" placeholder="请选择申诉项目" hide-details />
             <div class="appeal-label">申诉类型</div>
             <v-select class="mb-4 appeal-input" label="" :items="['成绩异议', '规则争议', '其他问题']" variant="outlined" density="comfortable" placeholder="请选择申诉类型" hide-details />
             <div class="appeal-label">申诉内容</div>
@@ -68,7 +68,7 @@
                 状态：<span class="appeal-record-status appeal-record-status-done">已处理</span>
               </div>
             </div>
-            <div class="appeal-record-detail-link-strong">
+            <div class="appeal-record-detail-link-strong" @click="goToAppealDetail('1')">
               <v-icon size="18" class="mr-1">mdi-eye-outline</v-icon>
               <span>查看详情</span>
             </div>
@@ -80,7 +80,14 @@
 </template>
 
 <script setup>
-// 纯展示页面，无需逻辑
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const goToAppealDetail = (id) => {
+  router.push(`/appeal-detail/${id}`);
+};
 </script>
 
 <style scoped>

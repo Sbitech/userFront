@@ -7,7 +7,7 @@
           <v-btn icon variant="text" class="sign-header-back" @click="$router.back && $router.back()">
             <v-icon color="#3b82f6">mdi-arrow-left</v-icon>
           </v-btn>
-          <span class="sign-header-title">签到功能</span>
+          <span class="sign-header-title">武术签到</span>
         </div>
         <!-- 签到卡片 -->
         <v-card class="pa-7 mb-8 sign-card card-shadow " elevation="1" style="border-radius: 14px;">
@@ -15,7 +15,7 @@
             <v-avatar size="44" class="mr-3" style="background:#e8f7ff;">
               <v-icon size="30" color="#3b82f6">mdi-account</v-icon>
             </v-avatar>
-            <span class="sign-card-title">比赛签到</span>
+            <span class="sign-card-title">武术比赛签到</span>
           </v-row>
           <v-alert type="info" class="mb-5 sign-alert" border="start" color="#e8f7ff" style="color:#3b82f6;">
 
@@ -24,14 +24,14 @@
           <v-row class="mb-2 sign-info-row px-2">
             <v-col cols="6" class="sign-label">参赛编号</v-col>
             <v-col cols="6" class="sign-label">参赛项目</v-col>
-            <v-col cols="6" class="sign-value font-weight-bold">20250707</v-col>
-            <v-col cols="6" class="sign-value font-weight-bold">100米短跑</v-col>
+            <v-col cols="6" class="sign-value font-weight-bold">WS20250707</v-col>
+            <v-col cols="6" class="sign-value font-weight-bold">长拳</v-col>
           </v-row>
           <v-row class="mb-2 sign-info-row px-2">
             <v-col cols="6" class="sign-label">比赛时间</v-col>
             <v-col cols="6" class="sign-label">比赛场地</v-col>
             <v-col cols="6" class="sign-value font-weight-bold">2025-07-7 10:00</v-col>
-            <v-col cols="6" class="sign-value font-weight-bold">1号田径场</v-col>
+            <v-col cols="6" class="sign-value font-weight-bold">武术馆A馆</v-col>
           </v-row>
           <div class="mb-2 sign-status-list px-2">
             <div>
@@ -50,7 +50,7 @@
             </div>
           </div>
 
-          <div class="mb-5  sign-next-time px-2">下次签到时间为：<span class="font-weight-bold">2025-07-07 9:50</span></div>
+          <div class="mb-5  sign-next-time px-2">下次签到时间为：<span class="font-weight-bold">2025-07-07 9:30</span></div>
           <v-btn color="primary" class="sign-btn px-4 mb-4" block rounded size="x-large">
             <v-icon left>mdi-qrcode-scan</v-icon>扫码签到
           </v-btn>

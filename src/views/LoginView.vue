@@ -45,6 +45,16 @@
             >
               登录
             </v-btn>
+            <v-btn
+              block
+              color="success"
+              class="login-btn mt-3"
+              size="large"
+              @click="tempLogin"
+              style="border-radius: 8px; font-weight: bold; letter-spacing: 1px;"
+            >
+              临时登录（无需密码）
+            </v-btn>
           </v-form>
         </v-card>
       </v-col>
@@ -88,6 +98,20 @@ const login = async () => {
   } finally {
     loading.value = false;
   }
+};
+
+const tempLogin = () => {
+  // 临时登录功能 - 无需密码直接登录
+  const tempUser = {
+    id: 1,
+    username: username.value || '临时用户',
+    nickname: username.value || '临时用户',
+    role: 'user'
+  };
+  
+  localStorage.setItem('user', JSON.stringify(tempUser));
+  alert('临时登录成功！');
+  router.push('/home');
 };
 </script>
 

@@ -7,7 +7,7 @@
           <v-btn icon variant="text" class="video-header-back" @click="$router.back && $router.back()">
             <v-icon color="#3b82f6">mdi-arrow-left</v-icon>
           </v-btn>
-          <span class="video-header-title">比赛录像</span>
+          <span class="video-header-title">武术比赛录像</span>
         </div>
         <!-- 录像卡片 -->
         <v-card class="pa-7 mb-8 video-card card-shadow" elevation="6">
@@ -15,15 +15,18 @@
             <v-avatar size="44" class="mr-3" style="background:#f5f7ff;">
               <v-icon size="30" color="#a259ff">mdi-video-outline</v-icon>
             </v-avatar>
-            <span class="video-card-title">比赛录像</span>
+            <span class="video-card-title">武术比赛录像</span>
           </v-row>
           <div class="video-section-label mb-2">录像回放</div>
           <v-responsive aspect-ratio="16/9" class="mb-5 video-player-wrap">
-            <video controls class="video-player">
-              <source src="" type="video/mp4" />
+            <video ref="videoPlayer" controls class="video-player">
+              <source :src="currentVideoUrl" type="video/mp4" />
               您的浏览器不支持 video 标签。
             </video>
           </v-responsive>
+          <div style="color: #666; font-size: 0.9rem; margin-bottom: 10px;">
+            当前视频: {{ currentVideoName || '未选择' }}
+          </div>
           <div class="video-table-scroll mb-2">
             <v-table class="video-table" density="comfortable">
               <thead>
@@ -36,20 +39,20 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>100米决赛录像</td>
+                  <td>男子长拳比赛录像</td>
                   <td>2024-05-15 10:30</td>
                   <td>256MB</td>
                   <td>
-                    <span class="video-link"><v-icon size="18" color="#2563eb">mdi-play-circle-outline</v-icon>播放</span>
+                    <span class="video-link" @click="playVideo('https://www.w3schools.com/html/mov_bbb.mp4', '男子长拳比赛录像')"><v-icon size="18" color="#2563eb">mdi-play-circle-outline</v-icon>播放</span>
                     <span class="video-link ml-3"><v-icon size="18" color="#2563eb">mdi-download</v-icon>下载</span>
                   </td>
                 </tr>
                 <tr>
-                  <td>跳远决赛录像</td>
+                  <td>男子长拳比赛录像</td>
                   <td>2024-05-16 14:15</td>
                   <td>198MB</td>
                   <td>
-                    <span class="video-link"><v-icon size="18" color="#2563eb">mdi-play-circle-outline</v-icon>播放</span>
+                    <span class="video-link" @click="playVideo('https://www.w3schools.com/html/mov_bbb.mp4', '男子长拳比赛录像')"><v-icon size="18" color="#2563eb">mdi-play-circle-outline</v-icon>播放</span>
                     <span class="video-link ml-3"><v-icon size="18" color="#2563eb">mdi-download</v-icon>下载</span>
                   </td>
                 </tr>
@@ -58,7 +61,7 @@
           </div>
         </v-card>
         <!-- 上传录像区 -->
-         <v-card class="pa-7 mb-8 video-card card-shadow" elevation="6">
+         <!-- <v-card class="pa-7 mb-8 video-card card-shadow" elevation="6">
           <div class="video-upload-label mb-2">上传录像</div>
           <v-card class="pa-0 mb-8 video-upload-card" elevation="0">
             <v-sheet class="video-upload-box-img" rounded outlined>
@@ -70,14 +73,37 @@
               提交视频
             </v-btn>
           </v-card>
-        </v-card>
+        </v-card> -->
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script setup>
-// 纯展示页面，无需逻辑
+import { ref } from 'vue'
+
+// 视频播放器引用
+const videoPlayer = ref(null)
+
+// 当前播放的视频URL和名称
+const currentVideoUrl = ref('')
+const currentVideoName = ref('')
+
+// 播放视频函数
+function playVideo(url, name) {
+  currentVideoUrl.value = url
+  currentVideoName.value = name
+  
+  // 等待DOM更新后播放视频
+  setTimeout(() => {
+    if (videoPlayer.value) {
+      videoPlayer.value.load()
+      videoPlayer.value.play().catch(error => {
+        console.log('视频播放失败:', error)
+      })
+    }
+  }, 100)
+}
 </script>
 
 <style scoped>
