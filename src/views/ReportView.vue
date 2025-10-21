@@ -89,26 +89,15 @@ import * as echarts from 'echarts';
 // 无需全局submitting状态变量，使用每个报告项的独立loading状态
 
 const reportList = ref([
-  { name: '长拳', score: '8.95分', rank: '第1名', isGenerated: false, loading: false, pdfUrl: null },
-  { name: '南拳', score: '8.76分', rank: '第2名', isGenerated: false, loading: false, pdfUrl: null },
-  { name: '太极拳', score: '9.12分', rank: '第1名', isGenerated: true, loading: false, pdfUrl: null },
-  { name: '刀术', score: '8.84分', rank: '第3名', isGenerated: false, loading: false, pdfUrl: null },
+  { name: '长拳', score: '8.95分', rank: '第1名', isGenerated: false, loading: false },
+  { name: '南拳', score: '8.76分', rank: '第2名', isGenerated: false, loading: false },
+  { name: '太极拳', score: '9.12分', rank: '第1名', isGenerated: true, loading: false },
+  { name: '刀术', score: '8.84分', rank: '第3名', isGenerated: false, loading: false },
 ]);
 
 const downloadReport = (item) => {
-  // 为未来接入PDF生成工具准备的函数
-  // 当接入PDF工具后，可以使用item的具体信息（如名称、成绩、排名等）来生成对应的PDF
-  
   // 模拟下载
-  alert(`下载${item.name}报告\n成绩：${item.score}\n排名：${item.rank}`);
-  
-  // 未来实现时可以调用PDF生成工具的API
-  // 例如：generatePDF(item.name, item.score, item.rank, item.pdfUrl)
-  
-  // 如果pdfUrl已存在，可以直接触发下载
-  // if (item.pdfUrl) {
-  //   window.open(item.pdfUrl, '_blank');
-  // }
+  alert(`下载${item.name}报告`);
 };
 
 // 生成报告
@@ -123,19 +112,7 @@ const generateReport = async (item) => {
     // 更新报告状态
     item.isGenerated = true;
     
-    // 为未来PDF生成准备的报告数据存储
-    // 这里可以存储更多用于PDF生成的详细信息
-    item.reportData = {
-      name: item.name,
-      score: item.score,
-      rank: item.rank,
-      generateTime: new Date().toLocaleString(),
-      // 其他可能需要的报告数据
-      category: '武术比赛',
-      eventType: item.name.includes('拳') ? '拳术' : '器械'
-    };
-    
-    alert('生成报告成功');
+    alert(`报告生成成功！\n项目：${item.name}`);
     
   } catch (error) {
     alert('生成失败，请稍后重试');
