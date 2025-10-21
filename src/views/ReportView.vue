@@ -18,12 +18,12 @@
             </v-avatar>
             <span class="report-card-title">成绩报告</span>
           </v-row>
-          <div class="mb-2 report-table-title">武术项目成绩列表</div>
+          <div class="mb-2 report-table-title">比赛项目成绩列表</div>
           <div class="report-table-scroll mb-2">
             <v-table class="report-table">
               <thead>
                 <tr>
-                  <th>比赛项目</th>
+                  <th>赛事名称</th>
                   <th>成绩</th>
                   <th>排名</th>
                   <th>操作</th>
@@ -59,19 +59,11 @@
             </v-avatar>
             <span class="report-card-title">成绩可视化</span>
           </v-row>
-          <div class="mb-6">
-            <div class="mb-2 report-chart-title">各武术项目得分对比</div>
-            <div class="report-chart-full" style="height:220px;width:100%;min-width:0;">
-              <v-responsive :aspect-ratio="2.1">
-                <div ref="barChart" style="width:100%;height:100%;min-width:0;"></div>
-              </v-responsive>
-            </div>
-          </div>
           <div>
-            <div class="mb-2 report-chart-title">长拳项目历史得分趋势</div>
-            <div class="report-chart-full" style="height:220px;width:100%;min-width:0;">
-              <v-responsive :aspect-ratio="2.1">
-                <div ref="lineChart" style="width:100%;height:100%;min-width:0;"></div>
+            <div class="mb-2 report-chart-title">各比赛项目得分对比</div>
+            <div class="report-chart-full" style="height:230px;width:100%;min-width:0;">
+              <v-responsive :aspect-ratio="2.0">
+                <div ref="barChart" style="width:100%;height:100%;min-width:0;"></div>
               </v-responsive>
             </div>
           </div>
@@ -89,10 +81,10 @@ import * as echarts from 'echarts';
 // 无需全局submitting状态变量，使用每个报告项的独立loading状态
 
 const reportList = ref([
-  { name: '长拳', score: '8.95分', rank: '第1名', isGenerated: false, loading: false },
-  { name: '南拳', score: '8.76分', rank: '第2名', isGenerated: false, loading: false },
-  { name: '太极拳', score: '9.12分', rank: '第1名', isGenerated: true, loading: false },
-  { name: '刀术', score: '8.84分', rank: '第3名', isGenerated: false, loading: false },
+  { name: '2024年全国男子长拳', score: '8.95分', rank: '第1名', isGenerated: false, loading: false },
+  { name: '2024年省运会南拳项目', score: '8.76分', rank: '第2名', isGenerated: false, loading: false },
+  { name: '2024年太极拳比赛', score: '9.12分', rank: '第1名', isGenerated: true, loading: false },
+  { name: '2024年刀术项目', score: '8.84分', rank: '第3名', isGenerated: false, loading: false },
 ]);
 
 const downloadReport = (item) => {
@@ -112,10 +104,11 @@ const generateReport = async (item) => {
     // 更新报告状态
     item.isGenerated = true;
     
-    alert(`报告生成成功！\n项目：${item.name}`);
+    // 显示成功提示，无需用户确认
+    showNotification(`报告生成成功：${item.name}`, 'success');
     
   } catch (error) {
-    alert('生成失败，请稍后重试');
+    showNotification('生成失败，请稍后重试', 'error');
     console.error('报告生成失败', error);
   } finally {
     // 清除加载状态
@@ -123,20 +116,66 @@ const generateReport = async (item) => {
   }
 };
 
+// 显示通知提示
+const showNotification = (message, type = 'info') => {
+  // 创建通知元素
+  const notification = document.createElement('div');
+  notification.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 4px;
+    color: white;
+    font-size: 14px;
+    z-index: 9999;
+    transition: all 0.3s ease;
+    ${type === 'success' ? 'background-color: #4caf50;' : 
+      type === 'error' ? 'background-color: #f44336;' : 
+      'background-color: #2196f3;'}
+  `;
+  notification.textContent = message;
+  
+  // 添加到页面
+  document.body.appendChild(notification);
+  
+  // 3秒后自动移除
+  setTimeout(() => {
+    notification.style.opacity = '0';
+    setTimeout(() => {
+      if (notification.parentNode) {
+        notification.parentNode.removeChild(notification);
+      }
+    }, 300);
+  }, 3000);
+};
+
 const barChart = ref(null);
-const lineChart = ref(null);
 
 onMounted(async () => {
   await nextTick();
   // 柱状图
   const bar = echarts.init(barChart.value);
   bar.setOption({
-    tooltip: {},
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow'
+      },
+      formatter: function(params) {
+        return `${params[0].value}分`;
+      }
+    },
     legend: { data: ['得分'], top: 0 },
-    grid: { left: 30, right: 20, bottom: 30, top: 40 },
+    grid: { left: 30, right: 20, bottom: 40, top: 40 },
     xAxis: {
-      data: ['长拳', '南拳', '太极拳', '刀术'],
-      axisLabel: { fontSize: 13 },
+      data: ['2024年全国\n男子长拳', '2024年省运会\n南拳项目', '2024年\n太极拳比赛', '2024年\n刀术项目'],
+      axisLabel: { 
+        fontSize: 9,
+        interval: 0,
+        lineHeight: 12,
+        margin: 8
+      },
     },
     yAxis: {
       max: 10,
@@ -155,34 +194,6 @@ onMounted(async () => {
           borderRadius: [6, 6, 0, 0],
         },
         barWidth: 36,
-      },
-    ],
-  });
-  // 折线图
-  const line = echarts.init(lineChart.value);
-  line.setOption({
-    tooltip: {},
-    legend: { data: ['长拳得分'], top: 0 },
-    grid: { left: 30, right: 20, bottom: 30, top: 40 },
-    xAxis: {
-      type: 'category',
-      data: ['2021', '2022', '2023', '2024'],
-      axisLabel: { fontSize: 13 },
-    },
-    yAxis: {
-      max: 10,
-      min: 8
-    },
-    series: [
-      {
-        name: '长拳得分',
-        type: 'line',
-        data: [8.2, 8.5, 8.7, 8.95],
-        symbol: 'circle',
-        symbolSize: 8,
-        lineStyle: { color: '#3b82f6', width: 3 },
-        itemStyle: { color: '#3b82f6' },
-        areaStyle: { color: 'rgba(59,130,246,0.08)' },
       },
     ],
   });
