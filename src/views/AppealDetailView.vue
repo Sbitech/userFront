@@ -233,8 +233,8 @@ const viewEvidence = (file) => {
 }
 
 .appeal-header-title {
-  font-size: 1.5rem;
-  font-weight: 900;
+  font-size: 1.25rem;
+  font-weight: bold;
   color: #222;
   margin-left: 12px;
   letter-spacing: 0.5px;
@@ -294,7 +294,7 @@ const viewEvidence = (file) => {
   }
   
   .appeal-header-title {
-    font-size: 1.08rem;
+    font-size: 1.25rem;
   }
   
   .appeal-card {

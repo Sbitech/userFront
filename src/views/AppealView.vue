@@ -11,11 +11,11 @@
         </div>
         <!-- 申诉表单卡片 -->
         <v-card class="pa-7 mb-8 appeal-card card-shadow" elevation="6">
-          <v-row align="center" class="mb-5">
+          <v-row align="center" class="mb-5 px-4 pt-4">
             <v-avatar size="44" class="mr-3" style="background:#fff7e6;">
               <v-icon size="30" color="#ff9800">mdi-gavel</v-icon>
             </v-avatar>
-            <span class="appeal-card-title" style="font-size:1.25rem;font-weight:900;">提交申诉</span>
+            <span class="appeal-card-title">提交申诉</span>
           </v-row>
           <v-form>
             <div class="appeal-label">申诉项目</div>
@@ -25,14 +25,24 @@
             <div class="appeal-label">申诉内容</div>
             <v-textarea class="mb-4 appeal-input" label="" variant="outlined" rows="3" placeholder="请详细描述申诉原因..." hide-details />
             <div class="appeal-label">证据上传</div>
-            <v-sheet class="appeal-upload-box mb-5" rounded outlined>
-              <v-row align="center" justify="center" style="height: 110px;">
-                <v-icon color="#bdbdbd" size="38">mdi-paperclip</v-icon>
+            <v-sheet class="appeal-upload-box mb-5" rounded outlined @click="triggerFileUpload">
+              <v-row align="center" justify="center" style="height: 80px;">
+                <v-icon color="#bdbdbd" size="28">{{ uploadedFiles.length > 0 ? 'mdi-check-circle' : 'mdi-paperclip' }}</v-icon>
               </v-row>
               <div class="appeal-upload-text-center">
-                <span class="appeal-upload-text-main">点击上传证据文件</span>
+                <span class="appeal-upload-text-main" style="font-size: 14px;">
+                  {{ uploadedFiles.length > 0 ? `已选择 ${uploadedFiles.length} 个文件` : '点击上传证据文件（可多选）' }}
+                </span>
               </div>
             </v-sheet>
+            <input
+              ref="fileInput"
+              type="file"
+              style="display: none"
+              accept=".jpg,.jpeg,.png,.gif,.mp4,.avi,.mov,.wmv,.mkv,.flv,.webm"
+              multiple
+              @change="handleFileUpload"
+            />
             <v-btn color="#2563EB" class="appeal-btn mb-2" block rounded size="x-large">
               <v-icon left>mdi-send</v-icon>提交申诉
             </v-btn>
@@ -84,9 +94,49 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
+const fileInput = ref(null);
+const uploadedFiles = ref([]);
 
 const goToAppealDetail = (id) => {
   router.push(`/appeal-detail/${id}`);
+};
+
+// 触发文件上传
+const triggerFileUpload = () => {
+  fileInput.value?.click();
+};
+
+// 处理文件上传
+const handleFileUpload = (event) => {
+  const files = Array.from(event.target.files);
+  if (files.length > 0) {
+    uploadedFiles.value = [];
+    
+    files.forEach(file => {
+      // 文件类型验证 - 只允许常见图片和视频格式
+      const validExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.mp4', '.avi', '.mov', '.wmv', '.mkv', '.flv', '.webm'];
+      const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+      
+      if (!validExtensions.includes(fileExtension)) {
+        alert(`文件 ${file.name} 格式不支持\n支持格式：JPG、PNG、GIF、MP4、AVI、MOV、WMV、MKV、FLV、WebM`);
+        return;
+      }
+      
+      // 文件大小限制（10MB）
+      if (file.size > 10 * 1024 * 1024) {
+        alert(`文件 ${file.name} 大小超过10MB限制`);
+        return;
+      }
+      
+      uploadedFiles.value.push(file);
+    });
+    
+    console.log(`已选择 ${uploadedFiles.value.length} 个文件:`, uploadedFiles.value.map(f => f.name));
+    
+    if (uploadedFiles.value.length === 0) {
+      alert('没有有效的文件被选择');
+    }
+  }
 };
 </script>
 
@@ -122,8 +172,8 @@ const goToAppealDetail = (id) => {
   margin-left: -8px;
 }
 .appeal-header-title {
-  font-size: 1.5rem;
-  font-weight: 900;
+  font-size: 1.25rem;
+  font-weight: bold;
   color: #222;
   margin-left: 12px;
   letter-spacing: 0.5px;
@@ -136,7 +186,7 @@ const goToAppealDetail = (id) => {
 }
 .appeal-card-title {
   font-size: 1.25rem;
-  font-weight: 900;
+  font-weight: bold;
   color: #222;
 }
 .appeal-label {
@@ -158,7 +208,7 @@ const goToAppealDetail = (id) => {
   background: #fff;
   cursor: pointer;
   transition: border-color 0.2s;
-  min-height: 110px;
+  min-height: 80px;
   padding: 0;
   box-sizing: border-box;
   margin-bottom: 18px;
@@ -168,8 +218,8 @@ const goToAppealDetail = (id) => {
 }
 .appeal-upload-text-center {
   text-align: center;
-  margin-top: -18px;
-  margin-bottom: 10px;
+  margin-top: -10px;
+  margin-bottom: 8px;
 }
 .appeal-upload-text-main {
   color: #B4B4B4;
@@ -201,7 +251,7 @@ const goToAppealDetail = (id) => {
 }
 .appeal-record-title {
   font-size: 1.25rem;
-  font-weight: 900;
+  font-weight: bold;
   color: #222;
   letter-spacing: 0.5px;
 }

@@ -11,8 +11,8 @@
         </div>
 
         <!-- 成绩卡片 -->
-        <v-card class="mb-6  report-card card-shadow report-padding" elevation="6">
-          <v-row align="center" class="mb-4">
+        <v-card class="pa-7 mb-8  report-card card-shadow report-padding" elevation="6">
+          <v-row align="center" class="mb-5 px-4 pt-4">
             <v-avatar size="40" class="mr-3" style="background:#e8f7e0;">
               <v-icon size="28" color="#4caf50">mdi-file-document-outline</v-icon>
             </v-avatar>
@@ -52,8 +52,8 @@
           </div>
         </v-card>
         <!-- 成绩可视化 -->
-        <v-card class="mb-8 report-card card-shadow report-padding" elevation="6">
-          <v-row align="center" class="mb-4">
+        <v-card class="pa-7 mb-8 report-card card-shadow report-padding" elevation="6">
+          <v-row align="center" class="mb-5 px-4 pt-4">
             <v-avatar size="40" class="mr-3" style="background:#e8f7ff;">
               <v-icon size="28" color="#3b82f6">mdi-chart-bar</v-icon>
             </v-avatar>
@@ -218,7 +218,7 @@ onMounted(async () => {
   background: #fff;
 }
 .report-card-title {
-  font-size: 1.12rem;
+  font-size: 1.25rem;
   font-weight: bold;
   color: #222;
 }
@@ -290,8 +290,8 @@ onMounted(async () => {
   margin-left: -8px;
 }
 .report-header-title {
-  font-size: 2rem;
-  font-weight: 900;
+  font-size: 1.25rem;
+  font-weight: bold;
   color: #222;
   margin-left: 12px;
   letter-spacing: 0.5px;

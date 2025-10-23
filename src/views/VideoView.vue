@@ -17,48 +17,73 @@
             </v-avatar>
             <span class="video-card-title">武术比赛录像</span>
           </v-row>
-          <div class="video-section-label mb-2">录像回放</div>
-          <v-responsive aspect-ratio="16/9" class="mb-5 video-player-wrap">
+          
+          <!-- 赛事选择下拉菜单 -->
+          <v-select
+            v-model="selectedEvent"
+            :items="events"
+            item-title="name"
+            item-value="id"
+            label="请选择要观看的赛事"
+            variant="outlined"
+            density="comfortable"
+            class="mb-4"
+            @update:model-value="onEventSelected"
+          >
+            <template v-slot:item="{ props, item }">
+              <v-list-item v-bind="props" :subtitle="item.raw.date + ' · ' + item.raw.venue"></v-list-item>
+            </template>
+          </v-select>
+
+          <!-- 视频播放器 -->
+          <v-responsive v-if="selectedEvent" aspect-ratio="16/9" class="mb-4 video-player-wrap">
             <video ref="videoPlayer" controls class="video-player">
               <source :src="currentVideoUrl" type="video/mp4" />
               您的浏览器不支持 video 标签。
             </video>
           </v-responsive>
-          <div style="color: #666; font-size: 0.9rem; margin-bottom: 10px;">
-            当前视频: {{ currentVideoName || '未选择' }}
-          </div>
-          <div class="video-table-scroll mb-2">
-            <v-table class="video-table" density="comfortable">
-              <thead>
-                <tr>
-                  <th class="video-th">录像名称</th>
-                  <th class="video-th">上传时间</th>
-                  <th class="video-th">大小</th>
-                  <th class="video-th">操作</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>男子长拳比赛录像</td>
-                  <td>2024-05-15 10:30</td>
-                  <td>256MB</td>
-                  <td>
-                    <span class="video-link" @click="playVideo('https://www.w3schools.com/html/mov_bbb.mp4', '男子长拳比赛录像')"><v-icon size="18" color="#2563eb">mdi-play-circle-outline</v-icon>播放</span>
-                    <span class="video-link ml-3"><v-icon size="18" color="#2563eb">mdi-download</v-icon>下载</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>男子长拳比赛录像</td>
-                  <td>2024-05-16 14:15</td>
-                  <td>198MB</td>
-                  <td>
-                    <span class="video-link" @click="playVideo('https://www.w3schools.com/html/mov_bbb.mp4', '男子长拳比赛录像')"><v-icon size="18" color="#2563eb">mdi-play-circle-outline</v-icon>播放</span>
-                    <span class="video-link ml-3"><v-icon size="18" color="#2563eb">mdi-download</v-icon>下载</span>
-                  </td>
-                </tr>
-              </tbody>
-            </v-table>
-          </div>
+
+          <!-- 视频下载按钮 -->
+          <v-row v-if="selectedEvent" justify="center" class="mb-5">
+            <v-col cols="12" sm="6" md="4">
+              <v-btn
+                color="success"
+                variant="elevated"
+                block
+                size="large"
+                @click="downloadVideo"
+                :disabled="!currentVideoUrl"
+              >
+                <v-icon start>mdi-download</v-icon>
+                下载视频
+              </v-btn>
+            </v-col>
+          </v-row>
+
+          <!-- 赛事信息显示区域 -->
+          <v-card v-if="selectedEvent" class="pa-4 mt-4" elevation="2" style="background: #f8f9ff;">
+            <div class="event-info-title mb-3">赛事信息</div>
+            <v-row dense>
+              <v-col cols="12" sm="6">
+                <div class="event-info-item">
+                  <span class="event-info-label">赛事名称：</span>
+                  <span class="event-info-value">{{ selectedEvent.name }}</span>
+                </div>
+              </v-col>
+              <v-col cols="12" sm="6">
+                <div class="event-info-item">
+                  <span class="event-info-label">比赛时间：</span>
+                  <span class="event-info-value">{{ selectedEvent.date }}</span>
+                </div>
+              </v-col>
+              <v-col cols="12" sm="6">
+                <div class="event-info-item">
+                  <span class="event-info-label">比赛场地：</span>
+                  <span class="event-info-value">{{ selectedEvent.venue }}</span>
+                </div>
+              </v-col>
+            </v-row>
+          </v-card>
         </v-card>
         <!-- 上传录像区 -->
          <!-- <v-card class="pa-7 mb-8 video-card card-shadow" elevation="6">
@@ -89,6 +114,36 @@ const videoPlayer = ref(null)
 const currentVideoUrl = ref('')
 const currentVideoName = ref('')
 
+// 选中的赛事
+const selectedEvent = ref(null)
+
+// 赛事数据数组
+const events = ref([
+  {
+    id: 1,
+    name: '男子长拳比赛',
+    date: '2024-05-15 10:30',
+    venue: '主体育馆A场',
+    videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4'
+  },
+  {
+    id: 2,
+    name: '男子南拳比赛',
+    date: '2024-05-17 09:45',
+    venue: '主体育馆A场',
+    videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4'
+  }
+])
+
+// 选择赛事后的处理函数
+function onEventSelected(eventId) {
+  const event = events.value.find(e => e.id === eventId)
+  if (event) {
+    selectedEvent.value = event
+    playVideo(event.videoUrl, event.name)
+  }
+}
+
 // 播放视频函数
 function playVideo(url, name) {
   currentVideoUrl.value = url
@@ -103,6 +158,25 @@ function playVideo(url, name) {
       })
     }
   }, 100)
+}
+
+// 下载视频函数
+function downloadVideo() {
+  if (!currentVideoUrl.value || !selectedEvent.value) {
+    return
+  }
+  
+  // 创建下载链接
+  const link = document.createElement('a')
+  link.href = currentVideoUrl.value
+  link.download = `${selectedEvent.value.name}_比赛录像.mp4`
+  link.target = '_blank'
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  
+  // 显示下载提示
+  console.log('开始下载视频:', selectedEvent.value.name)
 }
 </script>
 
@@ -138,8 +212,8 @@ function playVideo(url, name) {
   margin-left: -8px;
 }
 .video-header-title {
-  font-size: 1.5rem;
-  font-weight: 900;
+  font-size: 1.25rem;
+  font-weight: bold;
   color: #222;
   margin-left: 12px;
   letter-spacing: 0.5px;
@@ -152,13 +226,13 @@ function playVideo(url, name) {
 }
 .video-card-title {
   font-size: 1.25rem;
-  font-weight: 900;
+  font-weight: bold;
   color: #222;
 }
 .video-section-label {
-  font-size: 1.08rem;
+  font-size: 1.25rem;
+  font-weight: bold;
   color: #222;
-  font-weight: 500;
   margin-bottom: 8px;
   margin-top: 0;
 }
@@ -238,9 +312,9 @@ function playVideo(url, name) {
   text-decoration: underline;
 }
 .video-upload-label {
-  font-size: 1.08rem;
+  font-size: 1.25rem;
+  font-weight: bold;
   color: #222;
-  font-weight: 500;
   margin-bottom: 8px;
   margin-top: 0;
 }
@@ -297,7 +371,7 @@ body, html {
     height: 52px;
   }
   .video-header-title {
-    font-size: 1.08rem;
+    font-size: 1.25rem;
   }
   .video-card {
     padding: 14px !important;
@@ -387,4 +461,42 @@ body, html {
     border-radius: 4px;
   }
 }
+.event-info-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #222;
+  margin-bottom: 12px;
+}
+
+.event-info-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.event-info-label {
+  font-weight: 500;
+  color: #666;
+  margin-right: 8px;
+  min-width: 80px;
+}
+
+.event-info-value {
+  color: #333;
+  flex: 1;
+}
+
+@media (max-width: 600px) {
+  .event-info-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .event-info-label {
+    min-width: auto;
+    margin-bottom: 4px;
+  }
+}
+
 </style>

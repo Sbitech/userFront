@@ -130,7 +130,7 @@ const tempLogin = () => {
   box-shadow: 0 2px 8px #e3e8f7;
 }
 .login-title {
-  font-size: 1.35rem;
+  font-size: 1.25rem;
   font-weight: bold;
   color: #222;
 }
