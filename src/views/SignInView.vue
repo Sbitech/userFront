@@ -222,7 +222,7 @@ function getStatusClass(status) {
   }
 
   .sign-header-title {
-    font-size: 1.25rem;
+    font-size: 1.08rem;
   }
 
   .sign-card {
@@ -270,7 +270,7 @@ function getStatusClass(status) {
   }
 
   .sign-header-title {
-    font-size: 1.25rem;
+    font-size: 0.98rem;
   }
 
   .sign-card {

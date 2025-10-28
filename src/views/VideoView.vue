@@ -12,10 +12,7 @@
         <!-- 录像卡片 -->
         <v-card class="pa-7 mb-8 video-card card-shadow" elevation="6">
           <v-row align="center" class="mb-4">
-            <v-avatar size="44" class="mr-3" style="background:#f5f7ff;">
-              <v-icon size="30" color="#a259ff">mdi-video-outline</v-icon>
-            </v-avatar>
-            <span class="video-card-title">武术比赛录像</span>
+
           </v-row>
           
           <!-- 赛事选择下拉菜单 -->

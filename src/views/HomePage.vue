@@ -68,6 +68,14 @@ const features = [
     route: '/signin'
   },
   {
+    icon: 'mdi-calendar-clock',
+    color: '#ff6b6b',
+    bg: '#ffe8e8',
+    title: '赛事安排',
+    desc: '查看比赛时间安排表',
+    route: '/schedule'
+  },
+  {
     icon: 'mdi-file-document-outline',
     color: '#34c759',
     bg: '#e8fbe8',
@@ -76,20 +84,20 @@ const features = [
     route: '/report'
   },
   {
-    icon: 'mdi-gavel',
-    color: '#ff9800',
-    bg: '#fff7e6',
-    title: '申诉功能',
-    desc: '提交成绩争议申诉',
-    route: '/appeal'
-  },
-  {
     icon: 'mdi-video',
     color: '#a259ff',
     bg: '#f5e8ff',
     title: '比赛录像',
     desc: '查看录像回放',
     route: '/video'
+  },
+  {
+    icon: 'mdi-file-document-multiple',
+    color: '#ff9800',
+    bg: '#fff3e0',
+    title: '规章制度',
+    desc: '查看参赛规章制度',
+    route: '/rules'
   }
 ]
 
