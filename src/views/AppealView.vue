@@ -97,6 +97,16 @@ const router = useRouter();
 const fileInput = ref(null);
 const uploadedFiles = ref([]);
 
+onMounted(() => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  if (user) {
+    name.value = user.name;
+    username.value = user.username;
+  } else {
+    router.push('/login');
+  }
+});
+
 const goToAppealDetail = (id) => {
   router.push(`/appeal-detail/${id}`);
 };

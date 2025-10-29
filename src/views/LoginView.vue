@@ -80,7 +80,7 @@ const login = async () => {
   }
   loading.value = true;
   try {
-    const response = await axios.post('http://localhost:9090/user/login', {
+    const response = await axios.post('http://localhost:9090/playerInfo/login', {
       username: username.value,
       password: password.value
     });

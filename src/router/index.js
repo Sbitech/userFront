@@ -9,6 +9,7 @@ import ReportView from '../views/ReportView.vue';
 import VideoView from '../views/VideoView.vue';
 import ScheduleView from '../views/ScheduleView.vue';
 import RulesView from '../views/RulesView.vue';
+import ProfileView from '../views/ProfileView.vue';
 
 const routes = [
   {
@@ -59,6 +60,11 @@ const routes = [
     path: '/rules',
     name: 'Rules',
     component: RulesView
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: ProfileView
   }
 ];
 

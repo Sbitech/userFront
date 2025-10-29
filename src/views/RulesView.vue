@@ -1,177 +1,230 @@
 <template>
-  <v-container class="home-bg" style="width: 100%; margin: 0 auto; min-height: 100vh;">
-    <v-container class="py-6" style="width: 92%; max-width: 800px; margin: 0 auto;">
-      <!-- 页面标题 -->
-      <v-card class="mb-4 px-4 py-4 card-shadow" elevation="2" style="background: #ffffff; border-radius: 15px;">
-        <v-row align="center" justify="space-between">
-          <div class="text-h6 font-weight-bold">参赛规章制度</div>
-          <v-btn icon variant="text" @click="goBack">
-            <v-icon>mdi-arrow-left</v-icon>
+  <v-container class="rules-bg px-4" fluid>
+    <v-row justify="center">
+      <v-col cols="12" sm="10" md="7" lg="5" class="mx-auto">
+        <!-- 顶部返回和标题 -->
+        <div class="rules-header-navbar rules-header-shadow">
+          <v-btn icon variant="text" class="rules-header-back" @click="goBack">
+            <v-icon color="#3b82f6">mdi-arrow-left</v-icon>
           </v-btn>
-        </v-row>
-      </v-card>
+          <span class="rules-header-title">参赛规章制度</span>
+        </div>
 
-      <!-- PDF文件列表 -->
-      <v-card class="mb-4 card-shadow" elevation="2" style="background: #ffffff; border-radius: 15px;">
-        <v-card-text>
-          <div class="text-subtitle-1 font-weight-medium mb-3">可查看的规章制度</div>
-          <v-list>
-            <v-list-item 
-              v-for="rule in rules" 
-              :key="rule.id"
-              @click="selectRule(rule)"
-              :active="selectedRule?.id === rule.id"
-              class="mb-2"
-              style="border-radius: 8px;"
-            >
-              <template v-slot:prepend>
-                <v-icon color="#ff6b6b" class="mr-3">mdi-file-pdf-box</v-icon>
-              </template>
-              <v-list-item-title class="font-weight-medium">{{ rule.title }}</v-list-item-title>
-              <v-list-item-subtitle>{{ rule.description }}</v-list-item-subtitle>
-              <template v-slot:append>
-                <v-icon color="grey">mdi-chevron-right</v-icon>
-              </template>
-            </v-list-item>
-          </v-list>
-        </v-card-text>
-      </v-card>
+        <!-- 规章制度卡片 -->
+        <v-card class="pa-7 mb-8 rules-card card-shadow">
+          <!-- PDF选择下拉菜单 -->
+          <v-select v-model="selectedRuleId" :items="ruleDocuments" item-title="name" item-value="id"
+            label="请选择要查看的规章制度" variant="outlined" density="comfortable" class="mb-4"
+            @update:model-value="onRuleSelected">
+            <template v-slot:item="{ props, item }">
+              <v-list-item v-bind="props"></v-list-item>
+            </template>
+          </v-select>
 
-      <!-- PDF查看器 -->
-      <v-card v-if="selectedRule" class="card-shadow" elevation="2" style="background: #ffffff; border-radius: 15px;">
-        <v-card-text>
-          <div class="d-flex justify-space-between align-center mb-4">
-            <div class="text-subtitle-1 font-weight-medium">{{ selectedRule.title }}</div>
-            <v-btn color="primary" variant="outlined" size="small" @click="downloadPdf">
-              <v-icon left>mdi-download</v-icon>
-              下载PDF
-            </v-btn>
-          </div>
-          
           <!-- PDF显示区域 -->
-          <div class="pdf-viewer-container">
-            <object 
-              :data="selectedRule.pdfUrl" 
-              type="application/pdf" 
-              width="100%" 
-              height="600px"
-              style="border: 1px solid #e0e0e0; border-radius: 8px;"
-            >
-              <div class="text-center py-8">
-                <v-icon size="48" color="grey" class="mb-3">mdi-file-alert-outline</v-icon>
-                <div class="text-body-1 mb-2">您的浏览器不支持PDF预览</div>
-                <div class="text-body-2 text-grey mb-4">请点击下方下载按钮查看文件</div>
-              </div>
-            </object>
+          <div v-if="selectedRuleId" class="pdf-viewer-container">
+            <div class="pdf-viewer"
+              style="height: 600px; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
+              <iframe :src="currentPdfUrl" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+            </div>
+
+            <!-- PDF操作按钮 -->
+            <div class="pdf-actions mt-4 d-flex justify-center gap-2">
+              <v-btn color="primary" variant="outlined" @click="downloadPdf" prepend-icon="mdi-download">
+                下载PDF
+              </v-btn>
+            </div>
           </div>
 
-          <!-- 下载提示 -->
-          <div class="mt-4 text-center text-caption text-grey">
-            如果PDF无法显示，请尝试下载后查看
+          <!-- 未选择规章制度状态 -->
+          <div v-if="!selectedRuleId" class="text-center pa-8">
+            <v-icon size="64" color="grey-lighten-1" class="mb-4">mdi-file-document-outline</v-icon>
+            <div class="text-h6 text-grey-darken-1 mb-2">请选择要查看的规章制度</div>
+            <div class="text-body-2 text-grey-darken-1">选择上方的规章制度文档来查看详细内容</div>
           </div>
-        </v-card-text>
-      </v-card>
-
-      <!-- 空状态 -->
-      <v-card v-if="!selectedRule && rules.length > 0" class="card-shadow" elevation="2" style="background: #ffffff; border-radius: 15px;">
-        <v-card-text class="text-center py-8">
-          <v-icon size="64" color="grey lighten-1">mdi-file-document-outline</v-icon>
-          <div class="text-h6 mt-4 mb-2">选择规章制度</div>
-          <div class="text-body-2 text-grey">请从上方列表选择一个规章制度文件进行查看</div>
-        </v-card-text>
-      </v-card>
-
-      <!-- 无数据状态 -->
-      <v-card v-if="rules.length === 0" class="card-shadow" elevation="2" style="background: #ffffff; border-radius: 15px;">
-        <v-card-text class="text-center py-8">
-          <v-icon size="64" color="grey lighten-1">mdi-file-alert-outline</v-icon>
-          <div class="text-h6 mt-4 mb-2">暂无规章制度</div>
-          <div class="text-body-2 text-grey">请联系赛事方上传相关规章制度文件</div>
-        </v-card-text>
-      </v-card>
-    </v-container>
+        </v-card>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
-const selectedRule = ref(null);
 
-// 模拟规章制度数据
-const rules = ref([
+// 当前选中的规章制度ID
+const selectedRuleId = ref(null);
+
+// 规章制度文档列表（模拟数据）
+const ruleDocuments = ref([
   {
     id: 1,
-    title: '2024年全国武术锦标赛参赛规则',
-    description: '包含比赛流程、评分标准、注意事项等详细规定',
-    pdfUrl: '/sample-rules.pdf',
-    uploadDate: '2024-01-15'
+    name: '武术比赛参赛规则',
+    pdfUrl: '/public/pdf/武术比赛参赛规则.pdf'
   },
   {
     id: 2,
-    title: '武术比赛安全规范',
-    description: '参赛人员安全要求、场地安全标准等安全规定',
-    pdfUrl: '/sample-rules.pdf',
-    uploadDate: '2024-01-10'
+    name: '评分标准细则',
+
+    pdfUrl: '/public/pdf/评分标准细则.pdf'
   },
   {
     id: 3,
-    title: '评分标准与仲裁规则',
-    description: '详细的评分细则和仲裁申诉流程',
-    pdfUrl: '/sample-rules.pdf',
-    uploadDate: '2024-01-05'
+    name: '安全守则',
+    pdfUrl: '/public/pdf/安全守则.pdf'
+  },
+  {
+    id: 4,
+    name: '申诉流程',
+    pdfUrl: '/public/pdf/申诉流程.pdf'
   }
 ]);
 
-const selectRule = (rule) => {
-  selectedRule.value = rule;
+// 当前PDF的URL
+const currentPdfUrl = computed(() => {
+  const selectedRule = ruleDocuments.value.find(rule => rule.id === selectedRuleId.value);
+  return selectedRule ? selectedRule.pdfUrl : '';
+});
+
+// 返回上一页
+const goBack = () => {
+  router.back();
 };
 
+// 选择规章制度
+const onRuleSelected = (ruleId) => {
+  console.log('选中规章制度ID:', ruleId);
+};
+
+// 下载PDF
 const downloadPdf = () => {
-  if (selectedRule.value) {
+  if (currentPdfUrl.value) {
     const link = document.createElement('a');
-    link.href = selectedRule.value.pdfUrl;
-    link.download = `${selectedRule.value.title}.pdf`;
-    link.target = '_blank';
+    link.href = currentPdfUrl.value;
+    link.download = currentPdfUrl.value.split('/').pop();
+    document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
   }
 };
 
-const goBack = () => {
-  router.push('/home');
-};
-
+// 页面加载时默认选中第一个规章制度
 onMounted(() => {
-  // 页面加载时可以选择默认显示第一个规则
-  if (rules.value.length > 0) {
-    selectedRule.value = rules.value[0];
+  if (ruleDocuments.value.length > 0) {
+    selectedRuleId.value = ruleDocuments.value[0].id;
   }
 });
 </script>
 
 <style scoped>
-.home-bg {
-  background: #f5f7ff;
+.rules-bg {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
   min-height: 100vh;
+  padding-top: 20px;
+  padding-bottom: 40px;
+}
+
+.rules-header-navbar {
+  width: 100%;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px #e3e8f7;
+  padding: 0 32px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  margin-bottom: 24px;
+  margin-top: 0;
+  border-bottom: 1.5px solid #f0f1f5;
+}
+
+.rules-header-shadow {
+  box-shadow: 0 2px 8px #e3e8f7 !important;
+  border-radius: 14px !important;
+  border-bottom: none !important;
+}
+
+.rules-header-back {
+  margin-left: -8px;
+}
+
+.rules-header-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #222;
+  margin-left: 12px;
+  letter-spacing: 0.5px;
+}
+
+.rules-card {
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 2px 12px 0 rgba(80, 120, 200, 0.04);
 }
 
 .card-shadow {
-  box-shadow: 0 2px 8px #e3e8f7 !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
 .pdf-viewer-container {
-  position: relative;
-  width: 100%;
+  background: #fafafa;
+  border-radius: 8px;
+  padding: 16px;
 }
 
-.v-list-item--active {
-  background-color: #f5f7ff !important;
-  border-left: 3px solid #3b82f6;
+.pdf-viewer iframe {
+  background: white;
 }
 
-.v-list-item:hover {
-  background-color: #fafbfc;
+.pdf-actions {
+  gap: 12px;
+}
+
+.gap-2 {
+  gap: 8px;
+}
+
+@media (max-width: 900px) {
+  .rules-header-navbar {
+    padding: 0 8px;
+    height: 52px;
+  }
+
+  .rules-header-title {
+    font-size: 1.08rem;
+  }
+
+  .rules-card {
+    padding: 14px !important;
+    border-radius: 12px;
+  }
+
+  .pdf-viewer {
+    height: 500px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .rules-header-navbar {
+    padding: 0 6px;
+    height: 44px;
+  }
+
+  .rules-header-title {
+    font-size: 0.98rem;
+  }
+
+  .rules-card {
+    padding: 8px !important;
+    border-radius: 8px;
+  }
+
+  .pdf-viewer {
+    height: 500px !important;
+  }
 }
 </style>

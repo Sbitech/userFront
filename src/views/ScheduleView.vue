@@ -34,21 +34,21 @@
           
           <!-- 赛事安排列表 -->
           <div v-if="selectedCompetitionId" class="schedule-timeline-container">
-            <div v-for="(match, index) in filteredMatches" :key="index" class="mb-3">
+            <div v-for="(match, index) in filteredMatches" :key="index" class="mb-8">
               <!-- 第一行：日期时间 -->
               <v-row justify="center" class="mb-1">
-                <div class="text-subtitle-2 font-weight-medium">{{ match.date }} {{ match.time }}</div>
+                <div class="text-subtitle-2 font-weight-bold">{{ match.date }}{{ match.time }}</div>
               </v-row>
               
               <!-- 第二行：场次信息 -->
-              <v-row justify="center" class="mb-2">
-                <div class="text-body-2">{{ match.category }} {{ match.participants }}人</div>
+              <v-row justify="center" class="mb-1">
+                <div class="text-body-2 font-weight-bold">{{ match.category }}—{{ match.participants }}人</div>
               </v-row>
               
               <!-- 选手信息三列展示 -->
               <v-row dense>
-                <v-col v-for="(player, playerIndex) in match.players" :key="playerIndex" cols="12" md="4" class="pa-1">
-                  <v-card outlined class="text-center pa-2 player-card" style="min-height: 60px;">
+                <v-col v-for="(player, playerIndex) in match.players" :key="playerIndex" cols="4" class="pa-1">
+                  <v-card outlined class="text-center pa-2 player-card" style="min-height: 52px; box-shadow: 0 2px 6px rgba(0,0,0,0.12) !important;">
                     <div class="text-body-2 font-weight-medium">{{ player.name }}</div>
                     <div class="text-caption text-grey-darken-1">{{ player.school }}</div>
                   </v-card>

@@ -1,11 +1,11 @@
 <template>
-  <v-container class="home-bg" style="width: 100%; margin: 0 auto;">
-  <v-container class="py-6 home-bg" style="width: 92%; max-width: 600px; margin: 0 auto;">
+  <v-container class="home-bg" fluid style="width: 100%; margin: 0 auto;">
+  <v-container class="py-6 home-bg" fluid style="width: 92%; max-width: 600px; margin: 0 auto;">
     <!-- 用户卡片 -->
     <v-card class="mb-6 px-4 pt-4 pb-4 card-shadow" elevation="6" style="background: #ffffff; border-radius: 15px;">
       <v-row align="center" justify="space-between">
         <v-row align="center" no-gutters>
-          <v-avatar size="36">
+          <v-avatar size="36" style="cursor: pointer;" @click="goToProfile">
             <v-img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" />
           </v-avatar>
           <div class="ml-3">
@@ -50,7 +50,7 @@ const username = ref('');
 onMounted(() => {
   const user = JSON.parse(localStorage.getItem('user'));
   if (user) {
-    name.value = user.name;
+    name.value = user.realName;
     username.value = user.username;
   } else {
     router.push('/login');
@@ -92,17 +92,21 @@ const features = [
     route: '/video'
   },
   {
-    icon: 'mdi-file-document-multiple',
+    icon: 'mdi-book-open-variant',
     color: '#ff9800',
     bg: '#fff3e0',
-    title: '规章制度',
-    desc: '查看参赛规章制度',
+    title: '参赛规章',
+    desc: '查看比赛规则和制度',
     route: '/rules'
   }
 ]
 
 function goFeature(route) {
   if (route) router.push(route);
+}
+
+function goToProfile() {
+  router.push('/profile');
 }
 </script>
 
