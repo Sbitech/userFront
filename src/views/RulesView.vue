@@ -88,15 +88,7 @@ const currentPdfUrl = computed(() => {
   return selectedRule ? selectedRule.pdfUrl : '';
 });
 
-// 返回上一页
-const goBack = () => {
-  router.back();
-};
 
-// 选择规章制度
-const onRuleSelected = (ruleId) => {
-  console.log('选中规章制度ID:', ruleId);
-};
 
 // 下载PDF
 const downloadPdf = () => {
@@ -108,6 +100,11 @@ const downloadPdf = () => {
     link.click();
     document.body.removeChild(link);
   }
+};
+
+// 返回首页
+const goBack = () => {
+  router.push('/home');
 };
 
 // 页面加载时默认选中第一个规章制度

@@ -80,7 +80,7 @@ import axios from 'axios';
 const reportList = ref([
   { id: 1, name: '2024年全国男子长拳', score: '8.95分', rank: '第1名', isGenerated: false, loading: false, filePath: '' },
   { id: 2, name: '2024年省运会南拳项目', score: '8.76分', rank: '第2名', isGenerated: false, loading: false, filePath: '' },
-  { id: 3, name: '2024年太极拳比赛', score: '9.12分', rank: '第1名', isGenerated: true, loading: false, filePath: '' },
+  { id: 3, name: '2024年太极拳比赛', score: '9.12分', rank: '第1名', isGenerated: false, loading: false, filePath: '' },
   { id: 4, name: '2024年刀术项目', score: '8.84分', rank: '第3名', isGenerated: false, loading: false, filePath: '' },
 ]);
 
