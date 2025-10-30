@@ -35,14 +35,10 @@
                   <td>{{ item.score }}</td>
                   <td>{{ item.rank }}</td>
                   <td>
-                    <v-btn 
-                      variant="text" 
-                      size="small" 
-                      :color="item.isGenerated ? 'primary' : 'warning'"
-                      @click="item.isGenerated ? downloadReport(item) : generateReport(item)"
-                      :loading="item.loading"
-                    >
-                      <v-icon size="18" class="mr-1">{{ item.isGenerated ? 'mdi-download' : 'mdi-file-clock-outline' }}</v-icon>
+                    <v-btn variant="text" size="small" :color="item.isGenerated ? 'primary' : 'warning'"
+                      @click="item.isGenerated ? downloadReport(item) : generateReport(item)" :loading="item.loading">
+                      <v-icon size="18" class="mr-1">{{ item.isGenerated ? 'mdi-download' : 'mdi-file-clock-outline'
+                        }}</v-icon>
                       {{ item.isGenerated ? '下载报告' : '生成报告' }}
                     </v-btn>
                   </td>
@@ -77,39 +73,66 @@
 <script setup>
 import { ref, onMounted, nextTick } from 'vue';
 import * as echarts from 'echarts';
+import axios from 'axios';
 
 // 无需全局submitting状态变量，使用每个报告项的独立loading状态
 
 const reportList = ref([
-  { name: '2024年全国男子长拳', score: '8.95分', rank: '第1名', isGenerated: false, loading: false },
-  { name: '2024年省运会南拳项目', score: '8.76分', rank: '第2名', isGenerated: false, loading: false },
-  { name: '2024年太极拳比赛', score: '9.12分', rank: '第1名', isGenerated: true, loading: false },
-  { name: '2024年刀术项目', score: '8.84分', rank: '第3名', isGenerated: false, loading: false },
+  { id: 1, name: '2024年全国男子长拳', score: '8.95分', rank: '第1名', isGenerated: false, loading: false, filePath: '' },
+  { id: 2, name: '2024年省运会南拳项目', score: '8.76分', rank: '第2名', isGenerated: false, loading: false, filePath: '' },
+  { id: 3, name: '2024年太极拳比赛', score: '9.12分', rank: '第1名', isGenerated: true, loading: false, filePath: '' },
+  { id: 4, name: '2024年刀术项目', score: '8.84分', rank: '第3名', isGenerated: false, loading: false, filePath: '' },
 ]);
 
 const downloadReport = (item) => {
-  // 模拟下载
-  alert(`下载${item.name}报告`);
+  if (item.filePath) {
+    // 创建下载链接
+    const link = document.createElement('a');
+    link.href = item.filePath;
+    link.download = `${item.name}报告.pdf`;
+    link.target = '_blank';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showNotification(`开始下载：${item.name}报告`, 'success');
+  } else {
+    showNotification('报告文件路径不存在', 'error');
+  }
 };
 
 // 生成报告
 const generateReport = async (item) => {
   // 设置当前项的加载状态
   item.loading = true;
-  
+
   try {
-    // 模拟生成报告（实际使用时需要连接后端API）
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // 更新报告状态
-    item.isGenerated = true;
-    
-    // 显示成功提示，无需用户确认
-    showNotification(`报告生成成功：${item.name}`, 'success');
-    
+    // 获取当前用户信息
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user) {
+      showNotification('用户未登录', 'error');
+      return;
+    }
+
+    const response = await axios.get('http://localhost:9090/playerMatches/createPDF', {
+      params: {
+        id: item.id
+      }
+    });
+
+    if (response.data && response.data !== 'null') {
+      // 更新报告状态和文件路径
+      item.isGenerated = true;
+      item.filePath = response.data; // 假设后端返回的是文件路径
+
+      // 显示成功提示
+      showNotification(`报告生成成功：${item.name}`, 'success');
+    } else {
+      showNotification('报告生成失败，请稍后重试', 'error');
+    }
+
   } catch (error) {
-    showNotification('生成失败，请稍后重试', 'error');
     console.error('报告生成失败', error);
+    showNotification('生成失败，请稍后重试', 'error');
   } finally {
     // 清除加载状态
     item.loading = false;
@@ -130,15 +153,15 @@ const showNotification = (message, type = 'info') => {
     font-size: 14px;
     z-index: 9999;
     transition: all 0.3s ease;
-    ${type === 'success' ? 'background-color: #4caf50;' : 
-      type === 'error' ? 'background-color: #f44336;' : 
-      'background-color: #2196f3;'}
+    ${type === 'success' ? 'background-color: #4caf50;' :
+      type === 'error' ? 'background-color: #f44336;' :
+        'background-color: #2196f3;'}
   `;
   notification.textContent = message;
-  
+
   // 添加到页面
   document.body.appendChild(notification);
-  
+
   // 3秒后自动移除
   setTimeout(() => {
     notification.style.opacity = '0';
@@ -162,7 +185,7 @@ onMounted(async () => {
       axisPointer: {
         type: 'shadow'
       },
-      formatter: function(params) {
+      formatter: function (params) {
         return `${params[0].value}分`;
       }
     },
@@ -170,7 +193,7 @@ onMounted(async () => {
     grid: { left: 30, right: 20, bottom: 40, top: 40 },
     xAxis: {
       data: ['2024年全国\n男子长拳', '2024年省运会\n南拳项目', '2024年\n太极拳比赛', '2024年\n刀术项目'],
-      axisLabel: { 
+      axisLabel: {
         fontSize: 9,
         interval: 0,
         lineHeight: 12,
@@ -187,7 +210,7 @@ onMounted(async () => {
         type: 'bar',
         data: [8.95, 8.76, 9.12, 8.84],
         itemStyle: {
-          color: function(params) {
+          color: function (params) {
             const colors = ['#3b82f6', '#22c55e', '#fb923c', '#ef4444'];
             return colors[params.dataIndex];
           },
@@ -204,30 +227,36 @@ onMounted(async () => {
 .report-padding {
   padding: 16px !important;
 }
+
 .report-bg {
   background: #f5f7ff;
   min-height: 100vh;
 }
+
 .report-title {
   font-size: 1.25rem;
   font-weight: bold;
   color: #222;
 }
+
 .report-card {
   border-radius: 18px;
   background: #fff;
 }
+
 .report-card-title {
   font-size: 1.25rem;
   font-weight: bold;
   color: #222;
 }
+
 .report-table-title {
   font-size: 1.02rem;
   font-weight: 500;
   color: #222;
   margin-bottom: 8px;
 }
+
 .report-table-scroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
@@ -235,34 +264,41 @@ onMounted(async () => {
   background: #f7f8fa;
   padding-bottom: 2px;
 }
+
 .report-table {
   min-width: 420px;
   font-size: 0.98rem;
 }
+
 .report-table th {
   color: #8a8fa3;
   font-weight: 500;
   background: #f7f8fa;
 }
+
 .report-table td {
   color: #222;
   background: #fff;
 }
+
 .report-chart-title {
   font-size: 1.01rem;
   font-weight: 500;
   color: #222;
   margin-bottom: 6px;
 }
+
 .report-table-scroll::-webkit-scrollbar {
   height: 8px;
   background: #f0f1f5;
   border-radius: 8px;
 }
+
 .report-table-scroll::-webkit-scrollbar-thumb {
   background: #d1d5db;
   border-radius: 8px;
 }
+
 .report-header-navbar {
   width: 100%;
   background: #fff;
@@ -278,17 +314,21 @@ onMounted(async () => {
   margin-top: 0;
   border-bottom: none;
 }
+
 .report-header-shadow {
   box-shadow: 0 2px 8px #e3e8f7 !important;
   border-radius: 14px !important;
   border-bottom: none !important;
 }
+
 .card-shadow {
   box-shadow: 0 2px 8px #e3e8f7 !important;
 }
+
 .report-header-back {
   margin-left: -8px;
 }
+
 .report-header-title {
   font-size: 1.25rem;
   font-weight: bold;
@@ -296,70 +336,90 @@ onMounted(async () => {
   margin-left: 12px;
   letter-spacing: 0.5px;
 }
+
 .report-chart-full {
   width: 100% !important;
   min-width: 0 !important;
   overflow-x: visible !important;
 }
+
 .report-chart-scroll {
   /* 彻底移除横向滚动条样式 */
   overflow-x: visible !important;
   margin-bottom: 0 !important;
 }
+
 @media (max-width: 900px) {
   .report-header-navbar {
     padding: 0 8px;
     height: 52px;
   }
+
   .report-header-title {
     font-size: 1.08rem;
   }
+
   .report-card {
     padding: 14px !important;
     border-radius: 12px;
   }
+
   .report-card-title {
     font-size: 1.01rem;
   }
+
   .report-table-title {
     font-size: 0.97rem;
   }
+
   .report-table {
     font-size: 0.91rem;
     border-radius: 8px;
   }
-  .report-table th, .report-table td {
+
+  .report-table th,
+  .report-table td {
     padding: 8px 4px;
   }
+
   .report-chart-title {
     font-size: 0.97rem;
   }
 }
+
 @media (max-width: 600px) {
   .report-header-navbar {
     padding: 0 6px;
     height: 44px;
   }
+
   .report-header-title {
     font-size: 0.98rem;
   }
+
   .report-card {
     padding: 20px !important;
     border-radius: 8px;
   }
+
   .report-card-title {
     font-size: 0.89rem;
   }
+
   .report-table-title {
     font-size: 0.89rem;
   }
+
   .report-table {
     font-size: 0.85rem;
     border-radius: 6px;
   }
-  .report-table th, .report-table td {
+
+  .report-table th,
+  .report-table td {
     padding: 6px 2px;
   }
+
   .report-chart-title {
     font-size: 0.89rem;
   }
