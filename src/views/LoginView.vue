@@ -3,11 +3,6 @@
     <v-row align="center" justify="center" style="min-height: 100vh;">
       <v-col cols="12" sm="8" md="5" lg="4" class="login-col">
         <v-card class="pa-8" elevation="6" style="border-radius: 24px; background: #fff;">
-          <v-row justify="center" class="mb-4">
-            <v-avatar size="48" class="login-trophy">
-              <v-icon size="36" color="#3b82f6">mdi-trophy</v-icon>
-            </v-avatar>
-          </v-row>
           <div class="text-center mb-2 login-title">体育赛事本地辅助系统</div>
           <div class="text-center mb-6 login-subtitle">请输入您的账号密码登录系统</div>
           <v-form @submit.prevent="login">

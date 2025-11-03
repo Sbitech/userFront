@@ -17,22 +17,24 @@
             </v-avatar>
             <span class="sign-card-title">武术比赛签到</span>
           </v-row>
-          <v-alert type="info" class="mb-5 sign-alert" border="start" color="#e8f7ff" style="color:#3b82f6;">
 
-            请确认您的参赛信息
-          </v-alert>
+          <v-row class="mb-2 sign-info-row px-2">
+            <v-col cols="12" class="sign-label">赛事名称</v-col>
+            <v-col cols="12" class="sign-competition-name font-weight-bold">{{ competitionName }}</v-col>
+          </v-row>
           <v-row class="mb-2 sign-info-row px-2">
             <v-col cols="6" class="sign-label">参赛编号</v-col>
             <v-col cols="6" class="sign-label">参赛项目</v-col>
-            <v-col cols="6" class="sign-value font-weight-bold">WS20250707</v-col>
-            <v-col cols="6" class="sign-value font-weight-bold">长拳</v-col>
+            <v-col cols="6" class="sign-value font-weight-bold">{{ competitionId }}</v-col>
+            <v-col cols="6" class="sign-value font-weight-bold">{{ eventsName }}</v-col>
           </v-row>
           <v-row class="mb-2 sign-info-row px-2">
             <v-col cols="6" class="sign-label">比赛时间</v-col>
             <v-col cols="6" class="sign-label">比赛场地</v-col>
-            <v-col cols="6" class="sign-value font-weight-bold">2025-07-7 10:00</v-col>
-            <v-col cols="6" class="sign-value font-weight-bold">武术馆A馆</v-col>
+            <v-col cols="6" class="sign-value font-weight-bold">{{ formatDate(startTime) }}</v-col>
+            <v-col cols="6" class="sign-value font-weight-bold">{{ location }}</v-col>
           </v-row>
+
           <div class="mb-2 sign-status-list px-2">
             <div>
               第一次签到-赛前30分钟：
@@ -50,7 +52,7 @@
             </div>
           </div>
 
-          <div class="mb-5  sign-next-time px-2">下次签到时间为：<span class="font-weight-bold">2025-07-07 9:30</span></div>
+          <div class="mb-5  sign-next-time px-2">下次签到时间为：<span class="font-weight-bold">2025/07/07 9:30</span></div>
           <v-btn color="primary" class="sign-btn px-4 mb-4" block rounded size="x-large">
             <v-icon left>mdi-qrcode-scan</v-icon>扫码签到
           </v-btn>
@@ -68,6 +70,17 @@ const user = JSON.parse(localStorage.getItem('user'));
 const first = ref("");
 const second = ref("");
 const third = ref("");
+
+// 存储比赛项目信息
+const competitionId = ref("");
+const competitionName = ref("");
+const startDate = ref("");
+const endDate = ref("");
+const location = ref("");
+const eventLevel = ref("");
+const eventsName = ref("");
+const startTime = ref("");
+
 onMounted(() => {
 
   const getStatus = async () => {
@@ -84,7 +97,35 @@ onMounted(() => {
       console.error("获取签到状态失败:", error);
     }
   }
+
+
+  // 获取比赛项目信息
+  const getCompetitionEvents = async () => {
+    try {
+      const response = await axios.get("http://localhost:9090/events/getCompetition_Events", {
+        params: {
+          id: user.id
+        }
+      });
+      if (response.data) {
+        console.log("获取比赛项目信息成功:", response.data);
+        competitionId.value=response.data.competitionId;
+        eventsName.value=response.data.name;
+        competitionName.value=response.data.competitionName;
+        startDate.value=response.data.startDate;
+        endDate.value=response.data.endDate;
+        location.value=response.data.location;
+        eventLevel.value=response.data.eventLevel;
+        startTime.value=response.data.startTime;
+      }
+    } catch (error) {
+      console.error("获取比赛项目信息失败:", error);
+    }
+  }
+
+  // 页面加载时同时获取签到状态和比赛项目信息
   getStatus();
+  getCompetitionEvents();
 });
 // 状态转类名
 function getStatusClass(status) {
@@ -92,6 +133,19 @@ function getStatusClass(status) {
   if (status === '待签到') return 'sign-grey'
   if (status === '未签到') return 'sign-red'
   return 'sign-grey' // 默认
+}
+
+// 格式化日期
+function formatDate(dateString) {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  return date.toLocaleString('zh-CN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
 }
 </script>
 
@@ -198,23 +252,70 @@ function getStatusClass(status) {
   font-weight: bold;
   height: 52px;
   letter-spacing: 1px;
-  box-shadow: 0 2px 8px 0 rgba(59, 130, 246, 0.10);
 }
+
+/* 比赛项目信息样式 */
+.sign-competition-info {
+  background: #f8f9ff;
+  border-radius: 10px;
+  padding: 16px;
+  border-left: 4px solid #3b82f6;
+}
+
+.competition-title {
+  font-weight: bold;
+  color: #3b82f6;
+  margin-bottom: 12px;
+  font-size: 1.1rem;
+}
+
+.competition-item {
+  margin-bottom: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid #e8eaf6;
+}
+
+.competition-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.event-name {
+  font-weight: bold;
+  color: #222;
+  margin-bottom: 4px;
+  font-size: 1.05rem;
+}
+
+.event-details {
+  font-size: 0.95rem;
+  color: #666;
+}
+
+.event-details span {
+  margin-right: 16px;
+  display: inline-block;
+}
+
 .sign-status {
   font-weight: bold;
 }
 
 .sign-green {
-  color: #4caf50; /* Vuetify 的绿色 */
+  color: #4caf50;
+  /* Vuetify 的绿色 */
 }
 
 .sign-grey {
-  color: #9e9e9e; /* Vuetify 的灰色 */
+  color: #9e9e9e;
+  /* Vuetify 的灰色 */
 }
 
 .sign-red {
-  color: #f44336; /* Vuetify 的红色 */
+  color: #f44336;
+  /* Vuetify 的红色 */
 }
+
 @media (max-width: 900px) {
   .sign-header-navbar {
     padding: 0 8px;
