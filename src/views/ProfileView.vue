@@ -291,7 +291,7 @@ const savePassword = async () => {
     }
 
     // 调用修改密码API
-    const response = await axios.post('http://localhost:9090/playerInfo/alertPW', {
+    const response = await axios.post('http://43.143.94.191:9090/playerInfo/alertPW', {
       username: user.username,
       oldPassword: passwordForm.value.currentPassword,
       newPassword: passwordForm.value.newPassword

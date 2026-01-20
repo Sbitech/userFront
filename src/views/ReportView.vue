@@ -113,7 +113,7 @@ const generateReport = async (item) => {
       return;
     }
 
-    const response = await axios.get('http://localhost:9090/playerMatches/createPDF', {
+    const response = await axios.get('http://43.143.94.191:9090/playerMatches/createPDF', {
       params: {
         id: item.id
       }

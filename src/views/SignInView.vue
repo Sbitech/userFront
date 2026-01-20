@@ -85,7 +85,7 @@ onMounted(() => {
 
   const getStatus = async () => {
     try {
-      const response = await axios.get("http://localhost:9090/signIn/getSignInStatus", {
+      const response = await axios.get("http://43.143.94.191:9090/signIn/getSignInStatus", {
         params: {
           id: user.id
         }
@@ -102,7 +102,7 @@ onMounted(() => {
   // 获取比赛项目信息
   const getCompetitionEvents = async () => {
     try {
-      const response = await axios.get("http://localhost:9090/events/getCompetition_Events", {
+      const response = await axios.get("http://43.143.94.191:9090/events/getCompetition_Events", {
         params: {
           id: user.id
         }

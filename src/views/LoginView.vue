@@ -75,11 +75,11 @@ const login = async () => {
   }
   loading.value = true;
   try {
-    const response = await axios.post('http://localhost:9090/playerInfo/login', {
+    const response = await axios.post('http://43.143.94.191:9090/playerInfo/login', {
       username: username.value,
       password: password.value
     });
-    console.log
+    console.log(response.data);
     if (response.data) {
       alert('登录成功');
       localStorage.setItem('user', JSON.stringify(response.data));
